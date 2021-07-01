@@ -1,0 +1,7 @@
+numpy
+scipy
+matplotlib
+basemap
+netcdf4
+cftime
+https://github.com/matplotlib/basemap/archive/master.zip
