@@ -1,7 +1,6 @@
 numpy
 scipy
-matplotlib
-basemap
+matplotlib==2.2.3
 netcdf4
 cftime
-https://github.com/matplotlib/basemap/archive/master.zip
+pyproj==1.9.6
