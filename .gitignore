@@ -1,6 +1,5 @@
 
 # The pyroms .gitignore file
-
 build
 html
 *.so
