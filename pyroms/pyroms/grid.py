@@ -135,35 +135,35 @@ class ROMS_gridinfo(object):
         else:
             raise ValueError('Unknown grid type. Please check your gridid.txt file')
 
-      else: #lets get the grid information from the history and grid files
-        #print 'CJMP> getting grid info from ROMS history and grid files'
+      else: #lets get the grid information from the grid file
+        #print 'CJMP> getting grid info from ROMS grid file'
         assert type(grid_file)!=type(None), 'if specify history file you must specify grid file'
-        assert type(hist_file)!=type(None), 'if specify grid file you must specify history file'
+        # assert type(hist_file)!=type(None), 'if specify grid file you must specify history file'
 
-        #open history file and get necessary grid information from it.
-        hist=netCDF.Dataset(hist_file,'r')
+        #open grid file and get necessary grid information from it.
+        grid=netCDF.Dataset(grid_file,'r')
 
         #put data into ROMS_gridinfo object
         self.name=self.id
         self.grdfile=grid_file
-        self.N=len(hist.dimensions['s_rho'])
+        self.N=len(grid.dimensions['s_rho'])
         self.grdtype='roms'
 
         #now write this to deal with both ROMS 3 and 2
         try:
-          self.Vtrans=np.float(hist.Vstretching)
-          self.theta_s=np.float(hist.theta_s)
-          self.theta_b=np.float(hist.theta_b)
-          self.Tcline=np.float(hist.Tcline)
+          self.Vtrans=np.float(grid.Vstretching)
+          self.theta_s=np.float(grid.theta_s)
+          self.theta_b=np.float(grid.theta_b)
+          self.Tcline=np.float(grid.Tcline)
         except AttributeError:
           try:
-            self.Vtrans=np.float(hist.variables['Vstretching'][:])
+            self.Vtrans=np.float(grid.variables['stretching'][:])
           except:
-            print('variable Vtransform not found in history file. Defaulting to Vtrans=1')
+            print('variable Vtransform not found in grid file. Defaulting to Vtrans=1')
             self.Vtrans=1
-          self.theta_s=np.float(hist.variables['theta_s'][:])
-          self.theta_b=np.float(hist.variables['theta_b'][:])
-          self.Tcline=np.float(hist.variables['Tcline'][:])
+          self.theta_s=np.float(grid.variables['theta_s'][:])
+          self.theta_b=np.float(grid.variables['theta_b'][:])
+          self.Tcline=np.float(grid.variables['Tcline'][:])
 
 
 def print_ROMS_gridinfo(gridid):
@@ -546,6 +546,8 @@ def write_ROMS_grid(grd, filename='roms_grd.nc'):
         write_nc_var(grd.vgrid.s_w, 's_w', ('s_w'), 'S-coordinate at W-points')
         write_nc_var(grd.vgrid.Cs_r, 'Cs_r', ('s_rho'), 'S-coordinate stretching curves at RHO-points')
         write_nc_var(grd.vgrid.Cs_w, 'Cs_w', ('s_w'), 'S-coordinate stretching curves at W-points')
+        write_nc_var(grd.vgrid.vtransform, 'vtransform', (), 'vertical terrain-following transformation equation')
+        write_nc_var(grd.vgrid.vstretching, 'vstretching', (), 'vertical terrain-following stretching function')
 
     write_nc_var(grd.vgrid.h, 'h', ('eta_rho', 'xi_rho'), 'bathymetry at RHO-points', 'meter')
     #ensure that we have a bath dependancy for hraw

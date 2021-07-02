@@ -6,11 +6,11 @@ SHELL = /bin/sh
 
 #### Start of system configuration section. ####
 
-prefix = /home/kshedstrom/python
+prefix = /usr/local
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
-libdir = /home/kshedstrom/python/lib
+libdir = /usr/local/lib
 includedir = ${prefix}/include
 
 INSTALLDIRS =\

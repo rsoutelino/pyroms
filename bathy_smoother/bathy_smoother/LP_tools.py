@@ -4,7 +4,11 @@ from time import localtime
 import os
 import logging
 
-from lpsolve55 import *
+try:
+    from lpsolve55 import *
+except:
+    logging.warning('lpsolve55.so not found. Linear programming method will not be available.')
+
 
 # This code is adapted from the matlab code
 # "LP Bathymetry" by Mathieu Dutour Sikiric

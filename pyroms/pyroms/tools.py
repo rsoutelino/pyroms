@@ -1,8 +1,9 @@
 # encoding: utf-8
 
 import numpy as np
-from . import _iso
-from . import _obs_interp
+from ._iso import zslice as isozslice
+from ._obs_interp import hindices as fhindices
+from ._obs_interp import linterp2d as flinterp2d
 
 import pyroms
 
@@ -35,7 +36,7 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
 
     # compute the depth on Arakawa-C grid position
 
-    if Cpos == 'u':
+    if Cpos is 'u':
         # average z_r at Arakawa-C u points
         z = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
         if vert == True:
@@ -54,7 +55,7 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
                 y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         # average z_r at Arakawa-C v points
         z = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
         if vert == True:
@@ -73,7 +74,7 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
                 y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
-    elif Cpos == 'w':
+    elif Cpos is 'w':
         z = grd.vgrid.z_w[0,:]
         if vert == True:
             if grd.hgrid.spherical == 'T':
@@ -91,7 +92,7 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
                 y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
-    elif Cpos == 'rho':
+    elif Cpos is 'rho':
         # for temp, salt, rho
         z = grd.vgrid.z_r[0,:]
         if vert == True:
@@ -121,7 +122,7 @@ def zslice(var, depth, grd, Cpos='rho', vert=False, mode='linear'):
     depth = -abs(depth)
     depth = depth * np.ones(z.shape[1:])
 
-    zslice = _iso.zslice(z, var, depth, imode)
+    zslice = isozslice(z, var, depth, imode)
 
     # mask land
     zslice = np.ma.masked_where(mask == 0, zslice)
@@ -150,7 +151,7 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
 
     # compute the depth on Arakawa-C grid position
 
-    if Cpos == 'u':
+    if Cpos is 'u':
         # average z_r at Arakawa-C u points
         z = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
         if vert == True:
@@ -169,7 +170,7 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
                 y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         # average z_r at Arakawa-C v points
         z = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
         if vert == True:
@@ -188,7 +189,7 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
                 y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
-    elif Cpos == 'w':
+    elif Cpos is 'w':
         z = grd.vgrid.z_w[0,:]
         if vert == True:
             if grd.hgrid.spherical == 'T':
@@ -206,7 +207,7 @@ def sslice(var, sindex, grd, Cpos='rho', vert=False):
                 y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
-    elif Cpos == 'rho':
+    elif Cpos is 'rho':
         # for temp, salt, rho
         z = grd.vgrid.z_r[0,:]
         if vert == True:
@@ -259,7 +260,7 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
 
     # compute the depth on Arakawa-C grid position
 
-    if Cpos == 'u':
+    if Cpos is 'u':
         if vert == True:
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
@@ -282,7 +283,7 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
                 y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         if vert == True:
             z = grd.vgrid.z_w[0,:]
             if grd.hgrid.spherical == 'T':
@@ -302,7 +303,7 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
                 y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
-    elif Cpos == 'w':
+    elif Cpos is 'w':
         # for w, AKt, ...
         if vert == True:
             z = grd.vgrid.z_w[0,:]
@@ -329,7 +330,7 @@ def islice(var, iindex, grd, Cpos='rho', vert=False):
         mask = grd.hgrid.mask_rho[:]
 
 
-    elif Cpos == 'rho':
+    elif Cpos is 'rho':
         # for temp, salt, rho, ...
         if vert == True:
             z = grd.vgrid.z_w[0,:]
@@ -387,7 +388,7 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
 
     # compute the depth on Arakawa-C grid position
 
-    if Cpos == 'u':
+    if Cpos is 'u':
         if vert == True:
             z = grd.vgrid.z_w[0,:]
             if grd.hgrid.spherical == 'T':
@@ -407,7 +408,7 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
                 y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         if vert == True:
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
@@ -430,7 +431,7 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
                 y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
-    elif Cpos == 'w':
+    elif Cpos is 'w':
         # for w, AKt, ...
         if vert == True:
             z = grd.vgrid.z_w[0,:]
@@ -456,7 +457,7 @@ def jslice(var, jindex, grd, Cpos='rho', vert=False):
                 y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
-    elif Cpos == 'rho':
+    elif Cpos is 'rho':
         # for temp, salt, rho, ...
         if vert == True:
             z = grd.vgrid.z_w[0,:]
@@ -527,7 +528,7 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
 
     # compute the depth on Arakawa-C grid position
 
-    if Cpos == 'u':
+    if Cpos is 'u':
         # average z_r at Arakawa-C u points
         z = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
         if vert == True:
@@ -546,7 +547,7 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
                 y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         # average z_r at Arakawa-C v points
         z = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
         if vert == True:
@@ -565,7 +566,7 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
                 y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
-    elif Cpos == 'w':
+    elif Cpos is 'w':
         z = grd.vgrid.z_w[0,:]
         if vert == True:
             if grd.hgrid.spherical == 'T':
@@ -583,7 +584,7 @@ def isoslice(var,prop,isoval, grd, Cpos='rho', masking=True, vert=False):
                 y = grd.hgrid.y_rho[:]
         mask = grd.hgrid.mask_rho[:]
 
-    elif Cpos == 'rho':
+    elif Cpos is 'rho':
         # for temp, salt, rho
         z = grd.vgrid.z_r[0,:]
         if vert == True:
@@ -658,7 +659,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
 
     # compute the depth on Arakawa-C grid position and get grid information
 
-    if Cpos == 'u':
+    if Cpos is 'u':
         if vert == True:
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:-1,:] + z[:,1:,:])
@@ -680,7 +681,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
                 y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         if vert == True:
             z = grd.vgrid.z_w[0,:]
             z = 0.5 * (z[:,:,:-1] + z[:,:,1:])
@@ -702,7 +703,7 @@ def transect(var, istart, iend, jstart, jend, grd, Cpos='rho', vert=False, \
                 y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
-    elif Cpos == 'rho':
+    elif Cpos is 'rho':
         # for temp, salt, rho
         if vert == True:
             z = grd.vgrid.z_w[0,:]
@@ -955,7 +956,7 @@ def lonslice(var, longitude, grd, Cpos='rho', vert=False, spval=1e37):
     if len(pt_idx) != 2:
         raise ValueError('this function only works for simple quadrangle')
 
-    # determine if latitude line is crossing a i or j edge
+    # determine is latitude ligne is crossing a i or j edge
     side = np.zeros(2)
     if pt_idx[0] < Lp: side[0] = 1
     if pt_idx[0] >= Lp and pt_idx[0] < Lp+Mp: side[0] = 2
@@ -1058,7 +1059,7 @@ def latslice(var, latitude, grd, Cpos='rho', vert=False, spval=1e37):
     if len(pt_idx) != 2:
         raise ValueError('this function only works for simple quadrangle')
 
-    # determine if latitude line is crossing a i or j edge
+    # determine is latitude ligne is crossing a i or j edge
     side = np.zeros(2)
     if pt_idx[0] < Lp: side[0] = 1
     if pt_idx[0] >= Lp and pt_idx[0] < Lp+Mp: side[0] = 2
@@ -1111,7 +1112,7 @@ def zlayer(var, grd, h1=None, h2=None, Cpos='rho', vert=False):
 
     # compute the depth on Arakawa-C grid position
 
-    if Cpos == 'u':
+    if Cpos is 'u':
         # average z_r at Arakawa-C u points
         z = 0.5 * (grd.vgrid.z_w[0,:,:,:-1] + grd.vgrid.z_w[0,:,:,1:])
         if vert == True:
@@ -1130,7 +1131,7 @@ def zlayer(var, grd, h1=None, h2=None, Cpos='rho', vert=False):
                 y = grd.hgrid.y_u[:]
         mask = grd.hgrid.mask_u[:]
 
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         # average z_r at Arakawa-C v points
         z = 0.5 * (grd.vgrid.z_w[0,:,:-1,:] + grd.vgrid.z_w[0,:,1:,:])
         if vert == True:
@@ -1149,7 +1150,7 @@ def zlayer(var, grd, h1=None, h2=None, Cpos='rho', vert=False):
                 y = grd.hgrid.y_v[:]
         mask = grd.hgrid.mask_v[:]
 
-    elif Cpos == 'rho':
+    elif Cpos is 'rho':
         # for temp, salt, rho
         z = grd.vgrid.z_w[0,:]
         if vert == True:
@@ -1853,7 +1854,7 @@ def hindices(lon, lat, grd, Cpos='rho', rectangular=0, spval=1e37):
     lon = np.matrix(lon)
     lat = np.matrix(lat)
 
-    ipos, jpos = _obs_interp.hindices(spherical, angle.T, long.T, latg.T, \
+    ipos, jpos = fhindices(spherical, angle.T, long.T, latg.T, \
                                       lon, lat, spval, rectangular)
 
     # python indexing start with zero...
@@ -1876,6 +1877,6 @@ def obs_interp2d(Finp, lon, lat, grd, Cpos='rho', rectangular=0, spval=1e37):
     Iout = Iout + 1
     Jout = Jout + 1
 
-    Fout = _obs_interp.linterp2d(Finp.T,Iout,Jout)
+    Fout = flinterp2d(Finp.T,Iout,Jout)
 
     return Fout

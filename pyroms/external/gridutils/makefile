@@ -7,11 +7,11 @@ SHELL = /bin/sh
 
 #### Start of system configuration section. ####
 
-prefix = /home/kshedstrom/python
+prefix = /usr/local
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
-libdir = /home/kshedstrom/python/lib
+libdir = /usr/local/lib
 includedir = ${prefix}/include
 
 INSTALLDIRS =\
@@ -28,9 +28,9 @@ INSTALL_DATA = ${INSTALL} -m 644
 #### End of system configuration section. ####
 
 CC = gcc
-CFLAGS = -I/home/kshedstrom/python/include
-LDFLAGS = -L/home/kshedstrom/python/lib
-CPPFLAGS = -I/home/kshedstrom/python/include
+CFLAGS = -I/usr/local/include
+LDFLAGS = -L/usr/local/lib
+CPPFLAGS = -I/usr/local/include
 
 AR = ar
 ARFLAGS = cru

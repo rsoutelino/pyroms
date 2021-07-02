@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import numpy as np
-from .. import _remapping
+from .._remapping import flood as fflood
 
 import pyroms
 
@@ -34,25 +34,25 @@ def flood(varz, grdz, Cpos='rho', irange=None, jrange=None, \
     idx = np.where(abs((varz-spval)/spval)<=1e-5)
     varz[idx] = np.nan
 
-    if Cpos == 'rho':
+    if Cpos is 'rho':
         x = grdz.hgrid.lon_rho
         y = grdz.hgrid.lat_rho
         z = grdz.vgrid.z[:]
         h = grdz.vgrid.h
         mask = grdz.hgrid.mask_rho
-    elif Cpos == 'u':
+    elif Cpos is 'u':
         x = grdz.hgrid.lon_u
         y = grdz.hgrid.lat_u
         z = 0.5 * (grdz.vgrid.z[:,:,:-1] + grdz.vgrid.z[:,:,1:])
         h = 0.5 * (grdz.vgrid.h[:,:-1] + grdz.vgrid.h[:,1:])
         mask = grdz.hgrid.mask_u
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         x = grdz.hgrid.lon_v
         y = grdz.hgrid.lat_v
         z = 0.5 * (grdz.vgrid.z[:,:-1,:] + grdz.vgrid.z[:,1:,:])
         h = 0.5 * (grdz.vgrid.h[:-1,:] + grdz.vgrid.h[1:,:])
         mask = grdz.hgrid.mask_v
-    elif Cpos == 'w':
+    elif Cpos is 'w':
         x = grdz.hgrid.lon_rho
         y = grdz.hgrid.lat_rho
         z = grdz.vgrid.z[:]
@@ -108,7 +108,7 @@ def flood(varz, grdz, Cpos='rho', irange=None, jrange=None, \
             dry[:,0] = idxnan[0]+1
             dry[:,1] = idxnan[1]+1
 
-            varz[k,:] = _remapping.flood(varz[k,:], wet, dry, x, y, dmax)
+            varz[k,:] = fflood(varz[k,:], wet, dry, x, y, dmax)
 
     # drop the deepest values down
     idx = np.where(np.isnan(varz) == 1)

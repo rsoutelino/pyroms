@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 import numpy as np
-from .. import _interp
-from .. import _remapping
+from .._interp import xhslice
+# import _remapping
 
 import pyroms
 
@@ -39,19 +39,19 @@ def z2roms(varz, grdz, grd, Cpos='rho', irange=None, jrange=None, \
     else:
         raise Warning('%s not supported, defaulting to linear' % mode)
 
-    if Cpos == 'rho':
+    if Cpos is 'rho':
         z = grdz.vgrid.z[:]
         depth = grd.vgrid.z_r[0,:]
         mask = grd.hgrid.mask_rho
-    elif Cpos == 'u':
+    elif Cpos is 'u':
         z = 0.5 * (grdz.vgrid.z[:,:,:-1] + grdz.vgrid.z[:,:,1:])
         depth = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
         mask = grd.hgrid.mask_u
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         z = 0.5 * (grdz.vgrid.z[:,:-1,:] + grdz.vgrid.z[:,1:,:])
         depth = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
         mask = grd.hgrid.mask_v
-    elif Cpos == 'w':
+    elif Cpos is 'w':
         z = grdz.vgrid.z[:]
         depth = grd.vgrid.z_w[0,:]
         mask = grd.hgrid.mask_rho
@@ -75,7 +75,7 @@ def z2roms(varz, grdz, grd, Cpos='rho', irange=None, jrange=None, \
                'var shape and jrange must agree'
 
     # flood varz if requested
-    if flood:
+    if flood is True:
         varz = pyroms.remapping.flood(varz, grdz, Cpos=Cpos, \
                  irange=irange, jrange=jrange, spval=spval, \
                  dmax=dmax, cdepth=cdepth, kk=kk)

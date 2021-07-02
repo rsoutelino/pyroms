@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import numpy as np
-from .. import _interp
+from .._interp import xhslice
 import pdb
 
 def sta2z(var, grd, grdz, Cpos='rho', srange=None, \
@@ -30,10 +30,10 @@ def sta2z(var, grd, grdz, Cpos='rho', srange=None, \
         imode=0
         raise Warning('%s not supported, defaulting to linear' % mode)
 
-    if Cpos == 'rho':
+    if Cpos is 'rho':
         z = grd.vgrid.z_r[0,:]
         depth = grdz.vgrid.z
-    elif Cpos == 'w':
+    elif Cpos is 'w':
         z = grd.vgrid.z_w[0,:]
         depth = grdz.vgrid.z
     else:
@@ -77,5 +77,5 @@ def sta2z(var, grd, grdz, Cpos='rho', srange=None, \
     idx = np.where(abs((varz-spval)/spval)<=1e-5)
     varz[idx] = spval
     #varz = np.ma.masked_values(varz, spval, rtol=1e-5)
-
+    
     return varz

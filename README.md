@@ -1,149 +1,123 @@
-# Pyroms
-
 Welcome to Pyroms!
 
-Pyroms is a collection of tools to process input and output files
-from the Regional Ocean Modeling System, [ROMS](https://www.myroms.org/). It was originally
+Pyroms is a collection of tools to help with input and output files
+from the Regional Ocean Modeling System (ROMS). It was originally
 started by Rob Hetland as a googlecode project, then he morphed it
 into octant, also at googlecode. Frederic Castruccio then created a
-fork and renamed it back to pyroms.
+fork and renamed it back to pyroms. This version is still rather
+rough around the edges.
 
-Pyroms is now hosted on GitHub.com in the [ESMG/pyroms](https://github.com/ESMG/pyroms) repository. This version is on the [python3](https://github.com/ESMG/pyroms/tree/python3) branch. It requires Python 3.4 or later.
+Prerequisites
+-------------
 
-## Installation
+Now using Anaconda python to download python 3.x and a bunch of other stuff:
 
-Pyroms is still a bit rough around the edges, particularly with regard to installation. Recent development has been done in Python environments managed by [Conda](https://docs.conda.io/en/latest/). However Pyroms itself cannot yet be installed with Conda.
+   * Python itself. You will need a version that's at least 3.4.
 
-If you are starting from scratch, we recommend that you install
-[Anaconda](https://www.anaconda.com/) or
-[Miniconda](https://docs.conda.io/en/latest/miniconda.html) and create a Python 3 environment (as of December 2020, version 3.8 is your best bet) for Pyroms and your other scientific software. You should also consider making conda-forge your default channel. See the [conda-forge tips and tricks page](https://conda-forge.org/docs/user/tipsandtricks.html).
+   * numpy.
 
-If you don't want to use Conda, that's fine, but you will have to do more of the work yourself.
+   * scipy.
 
-## Prerequisites
+   * matplotlib. This is a plotting package to reproduce the Matlab
+     plotting, complete with everything you might not like about
+     Matlab plotting. This also contains the gui tools, but it
+     depends on an underlying gui package, be that tk, wx, X11, or
+     qt. If it can't find any of them, it's time to install one.
 
-The following are required and are all available from [Conda-Forge](https://conda-forge.org/).
+   * basemap from matplotlib. These are the map tools for Python,
+     complete with etopo2 in the examples directory (user beware).
 
-   * Python >= 3.4 (Python 3.8 currently recommended for new environments)
-   * [numpy](https://numpy.org/)
-   * [scipy](https://www.scipy.org/)
-   * [matplotlib](https://matplotlib.org/)
-   * [basemap](https://matplotlib.org/basemap/)
-   * [netcdf4](https://unidata.github.io/netcdf4-python/netCDF4/index.html)
-   * [cftime](https://unidata.github.io/cftime/)
-   * [lpsolve55](https://github.com/chandu-atina/lp_solve_python_3x)
-   * [pip](https://pypi.org/project/pip/)
+   * netCDF4 from Jeff Whitaker. This sits on top of the hdf5 and
+     netcdf4 libraries.
 
-The following is optional: Pyroms can be built and run without it but some of the functionality will be missing.
+   * ipython. Fred Castruccio recommends using "ipython --pylab" for
+     interactive fun. It preloads both numpy and the matplotlib
+     pylab package.
 
-   * scrip, a Python implementation of [SCRIP](https://github.com/SCRIP-Project/SCRIP),
-     the Spherical Coordinate Remapping and Interpolation Package. This is used by the pyroms
-     module. The Python scrip code (a rather old version) is
-     [bundled in pyroms](https://github.com/ESMG/pyroms/tree/python3/pyroms/external/scrip)
-     and can be built and installed separately as described below. In future we plan to
-     move from the bundled scrip code to a stand-alone package like
-     [ESMF/ESMPy](https://www.earthsystemcog.org/projects/esmpy/) or
-     [PySCRIP](https://github.com/dchandan/PySCRIP).
+   * natgrid from http://github.com/matplotlib/natgrid for at least
+     one of the examples.
 
-The following is optional and provides high-resolution coastlines for basemap:
+Planning to move to ESMF. Download it with:
 
-   * [basemap-data-hires](https://anaconda.org/conda-forge/basemap-data-hires/)
+     conda install --channel https://conda.anaconda.org/conda-forge esmf
 
-## Install from source
+Note that this recently failed for me...
 
-To clone a copy of the source and install the pyroms packages, you can use the following commands
-```
-# Cd to a convenient directory
-$ git clone https://github.com/ESMG/pyroms.git
-$ pip install -e pyroms/pyroms
-$ pip install -e pyroms/pyroms_toolbox
-$ pip install -e pyroms/bathy_smoother
-```
+We may also add jupyter to this list.
 
-This installs three PIP packages with the names pyroms, pyroms\_toolbox and bathy\_smoother,
-each with an [eponymous](https://en.wiktionary.org/wiki/eponymous) module.
+Installing Python
+-----------------
 
-An [editable-mode](https://pip.pypa.io/en/stable/reference/pip_install/#editable-installs) installation is recommended becauses it means changes you make to your copy of the source code will take effect when you import the modules. If you don't want this you can omit the "-e" option
+Assumes you have already fetched Anaconda and have 'conda' in your path.
+To make your own Anaconda environment named myenv (or most anything else):
 
-The "pip install" command runs "python setup.py install" (or "python setup.py develop" with the "-e" switch) in each of the subdirectories listed. The "pip install" form is recommended because it allow easy removal (see below)
+  conda create --name myenv
+  conda activate myenv
+  conda install -n myenv netCDF4
+  conda install -n myenv scipy
+  conda install -n myenv basemap
+  conda install -n myenv ipython
 
-The above should work on most Linuces and on OSX with the system gcc and gfortran compilers.
-They have also been verified to work in a Conda environment on Windows,
-provided you install the
-[m2w64-gcc](https://anaconda.org/msys2/m2w64-gcc) and [m2w64-gfortran](https://anaconda.org/msys2/m2w64-gcc-fortran) compilers.
+You shouldn't need your own environment if you control the whole system,
+but I need to make an environment on the supercomputer since their default
+does not include netCDF4 (and more).
 
-## Install scrip
+Installing Pyroms
+-----------------
 
-If you install as above and try to import the three Pyroms modules without having installed
-scrip you will get a warning like this:
+Pyroms is currently in three different packages, pyroms itself,
+pyroms_toolbox, and bathy_smoother. We are in the process of creating
+setup.py scripts for each, plus an examples directory.
 
-```
-$ python
-Python 3.8.5 | packaged by conda-forge | (default, Aug 29 2020, 01:22:49)
-[GCC 7.5.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import pyroms
-WARNING:root: scrip could not be imported. Remapping functions will not be available
->>> import pyroms_toolbox
->>> import bathy_smoother
-```
+For now,
 
-The scrip module is not available via Conda or any other package repository and we are looking at alternatives. In the meantime, scrip can be built and installed from source as follows
+  cd pyroms_toolbox; python setup.py build
+                     python setup.py install --prefix=xxx;
+                     cd ..
 
-```
-# Start in the directory into which you cloned pyroms and cd to the SCRIP
-# source directory
-$ cd pyroms/pyroms/external/scrip/source/
+  cd bathy_smoother; python setup.py build;
+                     python setup.py install --prefix=xxx;
+                     cd ..
+  cd pyroms; check the paths in the install script and see if it runs...
+             Maybe cut and paste from it into a bash shell.
 
-# Print the location of the active Conda environment (which is called "python38"
-# in this case). The active environment location is used to find the netCDF and
-# other libraries.
-$ conda info | grep "active env location"
-    active env location : /home/hadfield/miniconda3/envs/python38
+I had to hack the scrip makefile for the fortran90 netcdf stuff. The
+anaconda netcdf-fortran reports:
+    nf-config not yet implemented for cmake builds
 
-# Run make to build the scrip Python extension and install it into the Conda
-# environment. The makefile calculates a variable called SCRIP_EXT_DIR, into
-# which it installs the scrip Python extension. If pyroms has been installed
-# in editable (development) mode, set the DEVELOP variable to a non-empty value.
-$ export PREFIX=/home/hadfield/miniconda3/envs/python38
-$ make DEVELOP=1 PREFIX=$PREFIX install
-$ mv -vf scrip*.so ../../../pyroms
-‘scrip.cpython-38-x86_64-linux-gnu.so’ -> ‘../../../pyroms/scrip.cpython-38-x86_64-linux-gnu.so’
-```
+A note on the .so files from fortran: They might now end up with names like:
 
-## Removal
+    scrip.cpython-35m-x86_64-linux-gnu.so
 
-To remove the three Pyroms packages you can use the "pip uninstall" command, referring to the packages by their package names
+It's OK - they'll load as long as they are in your PYTHONPATH. You might
+also need libgu.so to be in your LD_LIBRARY_PATH. I'm getting inconsistent
+results with where the .so files need to be. Best results for me are if I go
+to the site-packages directory where pyroms got installed and copy all the
+.so files:
 
-```
-# Run from any directory in the same environment as you installed
-# and use the package name
-$ pip uninstall pyroms
-$ pip uninstall pyroms_toolbox
-$ pip uninstall bathy_smoother
-```
+    cp pyroms/*.so .
+    cp pyroms_toolbox/*.so .
+    cp bathy_smoother/*.so .
 
-If you have built and installed the scrip extension from the makefile as above, you can also uninstall it with the makefile. The PREFIX does not need to be set in this case.
+Make sure this site-packages directory is in your PYTHONPATH. As for
+libgu.so, it went into $DESTDIR/lib, for me $HOME/python/lib - that's
+what needs to be in the LD_LIBRARY_PATH.
 
-```
-# Start in the directory into which you cloned pyroms and cd to the SCRIP
-# source directory
-$ cd pyroms/pyroms/external/scrip/source/
+Also, f2py may or may not be called f2py3, depending. It's listed explicitly
+in the scrip makefile and under pyroms_toolbox/pyroms_toolbox/src/makefile.
 
-# Remove with make.
-$ make DEVELOP=1 uninstall
-```
+Running
+-------
 
-## Running Pyroms
-
-We have a gridid.txt file that's pointed to by the PYROMS\_GRIDID\_FILE
+We have a gridid.txt file that's pointed to by the PYROMS_GRIDID_FILE
 environment variable. If you are operating on files containing
 sufficient grid information already, you won't need to use this.
 An example is provided in the examples directory.
 
 
-## Doxygen
+Doxygen
+-------
 
-Running "doxygen .doxygen" in any of pyroms, pyroms\_toolbox or
-bathy\_smoother will generate doxygen files. Edit the .doxygen files to
+Running "doxygen .doxygen" in any of pyroms, pyroms_toolbox or
+bathy_smoother will generate doxygen files. Edit the .doxygen files to
 specify html vs. some other output format.

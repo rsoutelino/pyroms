@@ -194,6 +194,8 @@ class s_coordinate_4(s_coordinate):
         self.hc = self.Tcline
 
         self.Vtrans = 4
+        self.vtransform = 2 # to keep netcdf consistent
+        self.vstretching = 4 # to keep netcdf consistent
 
         self.c1 = 1.0
         self.c2 = 2.0

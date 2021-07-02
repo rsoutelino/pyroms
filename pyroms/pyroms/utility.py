@@ -10,7 +10,8 @@ from datetime import datetime
 from scipy import interpolate
 
 import pyroms
-from . import _interp
+from ._interp import get_bottom as fget_bottom
+from ._interp import get_surface as fget_surface
 
 
 def get_lonlat(iindex, jindex, grd, Cpos='rho'):
@@ -21,16 +22,16 @@ def get_lonlat(iindex, jindex, grd, Cpos='rho'):
     for grid point (iindex, jindex)
     """
 
-    if Cpos == 'u':
+    if Cpos is 'u':
         lon = grd.hgrid.lon_u[:,:]
         lat = grd.hgrid.lat_u[:,:]
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         lon = grd.hgrid.lon_v[:,:]
         lat = grd.hgrid.lat_v[:,:]
-    elif Cpos == 'rho':
+    elif Cpos is 'rho':
         lon = grd.hgrid.lon_rho[:,:]
         lat = grd.hgrid.lat_rho[:,:]
-    elif Cpos == 'psi':
+    elif Cpos is 'psi':
         lon = grd.hgrid.lon_psi[:,:]
         lat = grd.hgrid.lat_psi[:,:]
     else:
@@ -47,16 +48,16 @@ def get_ij(longitude, latitude, grd, Cpos='rho'):
     point (longitude,latitude) in degree
     """
 
-    if Cpos == 'u':
+    if Cpos is 'u':
         lon = grd.hgrid.lon_u[:,:]
         lat = grd.hgrid.lat_u[:,:]
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         lon = grd.hgrid.lon_v[:,:]
         lat = grd.hgrid.lat_v[:,:]
-    elif Cpos == 'rho':
+    elif Cpos is 'rho':
         lon = grd.hgrid.lon_rho[:,:]
         lat = grd.hgrid.lat_rho[:,:]
-    elif Cpos == 'psi':
+    elif Cpos is 'psi':
         lon = grd.hgrid.lon_psi[:,:]
         lat = grd.hgrid.lat_psi[:,:]
     else:
@@ -78,16 +79,16 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
 
     if type(grd).__name__ == 'ROMS_Grid':
 
-        if Cpos == 'u':
+        if Cpos is 'u':
             lon = grd.hgrid.lon_u[:,:]
             lat = grd.hgrid.lat_u[:,:]
-        elif Cpos == 'v':
+        elif Cpos is 'v':
             lon = grd.hgrid.lon_v[:,:]
             lat = grd.hgrid.lat_v[:,:]
-        elif Cpos == 'rho':
+        elif Cpos is 'rho':
             lon = grd.hgrid.lon_rho[:,:]
             lat = grd.hgrid.lat_rho[:,:]
-        elif Cpos == 'vert':
+        elif Cpos is 'vert':
             lon = grd.hgrid.lon_vert[:,:]
             lat = grd.hgrid.lat_vert[:,:]
         else:
@@ -96,16 +97,16 @@ def find_nearestgridpoints(longitude, latitude, grd, Cpos='rho'):
 
     if type(grd).__name__ == 'CGrid_geo':
 
-        if Cpos == 'u':
+        if Cpos is 'u':
             lon = grd.lon_u[:,:]
             lat = grd.lat_u[:,:]
-        elif Cpos == 'v':
+        elif Cpos is 'v':
             lon = grd.lon_v[:,:]
             lat = grd.lat_v[:,:]
-        elif Cpos == 'rho':
+        elif Cpos is 'rho':
             lon = grd.lon_rho[:,:]
             lat = grd.lat_rho[:,:]
-        elif Cpos == 'vert':
+        elif Cpos is 'vert':
             lon = grd.lon_vert[:,:]
             lat = grd.lat_vert[:,:]
         else:
@@ -341,7 +342,7 @@ def get_bottom(varz, mask, spval=1e37):
 
     bottom = spval * np.ones((jj, ii))
 
-    bottom[:,:] = _interp.get_bottom(varz,mask,spval)
+    bottom[:,:] = fget_bottom(varz,mask,spval)
 
     return bottom
 
@@ -356,7 +357,7 @@ def get_surface(varz, mask, spval=1e37):
 
     surface = spval * np.ones((jj, ii))
 
-    surface[:,:] = _interp.get_surface(varz,mask,spval)
+    surface[:,:] = fget_surface(varz,mask,spval)
 
     return surface
 

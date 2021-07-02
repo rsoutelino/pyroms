@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import numpy as np
-from .. import _interp
+from .._interp import xhslice
 
 def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
            spval=1e37, mode='linear'):
@@ -32,19 +32,19 @@ def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
         raise Warning('%s not supported, defaulting to linear' % mode)
 
 
-    if Cpos == 'rho':
+    if Cpos is 'rho':
         z = grd.vgrid.z_r[0,:]
         depth = grdz.vgrid.z
         mask = grd.hgrid.mask_rho
-    elif Cpos == 'u':
+    elif Cpos is 'u':
         z = 0.5 * (grd.vgrid.z_r[0,:,:,:-1] + grd.vgrid.z_r[0,:,:,1:])
         depth = 0.5 * (grdz.vgrid.z[:,:,:-1] + grdz.vgrid.z[:,:,1:])
         mask = grd.hgrid.mask_u
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         z = 0.5 * (grd.vgrid.z_r[0,:,:-1,:] + grd.vgrid.z_r[0,:,1:,:])
         depth = 0.5 * (grdz.vgrid.z[:,:-1,:] + grdz.vgrid.z[:,1:,:])
         mask = grd.hgrid.mask_v
-    elif Cpos == 'w':
+    elif Cpos is 'w':
         z = grd.vgrid.z_w[0,:]
         depth = grdz.vgrid.z
         mask = grd.hgrid.mask_rho
@@ -72,7 +72,7 @@ def roms2z(var, grd, grdz, Cpos='rho', irange=None, jrange=None, \
     varz = np.zeros((nlev, jrange[1]-jrange[0], irange[1]-irange[0]))
 
     for k in range(nlev):
-        varz[k,:,:] = _interp.xhslice(var, \
+        varz[k,:,:] = xhslice(var, \
                         z[:,jrange[0]:jrange[1], irange[0]:irange[1]], \
                         depth[k,jrange[0]:jrange[1], irange[0]:irange[1]], \
                         mask[jrange[0]:jrange[1], irange[0]:irange[1]], \

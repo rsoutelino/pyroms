@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-import _average
+from ._average import avg2d, avg3d
 import types
 import pyroms
 import numpy as np
@@ -57,7 +57,7 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
     avg.ncfiles = pyroms.io.MFDataset(ncfiles)
 
     ocean_time = pyroms.utility.get_nc_var(timevar, avg.ncfiles)
-    Nt = len(ocean_time[:])
+    Nt = len(ocean_time[:])   
 
     if trange is None:
         start = 0
@@ -78,7 +78,7 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
         leng = len(vsh)
 
         # if variable is 4D, enters this conditional
-        if leng == 4:
+        if leng is 4:
             # create an empty numpy array with dimensions equal to shape of the
             # shape of the variable minus the ocean_time dimension
             incavg = np.zeros((vsh[1],vsh[2],vsh[3]))
@@ -87,14 +87,14 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
             for i in range(start,end):
                 ii = ii + 1
                 #calls Fortran function avg3d to perform an incremental average
-                incavg = _average.avg3d(vble[i,:],incavg,ii,spval)
+                incavg = avg3d(vble[i,:],incavg,ii,spval)
             # mask
             incavg = np.ma.masked_values(incavg, spval)
             #sets attribute of avg object to the final temporal average
             setattr(avg, varname, incavg[:])
 
         # if variable is 3D, enters this conditional
-        elif leng == 3:
+        elif leng is 3:
             # create an empty numpy array with dimensions equal to shape of the
             # shape of the variable minus the ocean_time dimension
             incavg = np.zeros((vsh[1],vsh[2]))
@@ -103,7 +103,7 @@ def average(var, ncfiles, trange=None, avgfile=None, spval=1e37, timevar='ocean_
             for i in range(start,end):
                 ii = ii + 1
                 #calls Fortran function avg2d to perform an incremental average
-                incavg = _average.avg2d(vble[i,:],incavg,ii,spval)
+                incavg = avg2d(vble[i,:],incavg,ii,spval)
             # mask
             incavg = np.ma.masked_values(incavg, spval)
             #sets attribute of avg object to the final temporal average
