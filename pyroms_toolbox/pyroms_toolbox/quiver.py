@@ -49,7 +49,7 @@ def quiver(uvar, vvar, tindex, depth, gridid, \
     # get u and v
     if filename == None:
 
-        if tindex is not -1:
+        if tindex != -1:
             assert len(uvar.shape) == 4, 'uvar must be 4D (time plus space).'
             assert len(vvar.shape) == 4, 'vvar must be 4D (time plus space).'
         else:

@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # CREATE A PYTHON3 ENVIRONMENT AND SET ITS PATH HERE
-export PYROMS_PATH=/home/rsoutelino/Envs/rafroms/lib/python3.8/site-packages/pyroms
+export PYROMS_PATH=$1
+# export PYROMS_PATH=/home/rsoutelino/Envs/pyroms/lib/python3.8/site-packages/pyroms
 
 # INSTALL via apt:
 # sudo apt install lp-solve liblpsolve55-dev libnetcdff-dev
@@ -63,13 +64,13 @@ make f2py
 sudo make install
 cp -r scrip*.so* $PYROMS_PATH
 
+cd $CURDIR/../pyroms_toolbox
+sudo python setup.py install
+python setup.py install
 
-cd $CURDIR
-cd ..
-
-
-pip install -e pyroms_toolbox
-pip install -e bathy_smoother
+cd $CURDIR/../bathy_smoother
+sudo python setup.py install
+python setup.py install
 
 echo
 echo "Done installing pyroms..."

@@ -57,7 +57,7 @@ def twoDview(var, tindex, grid, filename=None, \
 
     Np, Mp, Lp = grd.vgrid.z_r[0,:].shape
 
-    if tindex is not -1:
+    if tindex != -1:
         assert len(var.shape) == 3, 'var must be 3D (time plus space).'
         K, M, L = var.shape
     else:

@@ -58,7 +58,7 @@ def isoview(var, prop, tindex, isoval, grid, filename=None, \
 
     Np, Mp, Lp = grd.vgrid.z_r[0,:].shape
 
-    if tindex is not -1:
+    if tindex != -1:
         assert len(var.shape) == 4, 'var must be 4D (time plus space).'
         K, N, M, L = var.shape
     else:
