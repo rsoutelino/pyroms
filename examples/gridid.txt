@@ -11,6 +11,17 @@ theta_b = 0.1
 Tcline  = 250
 #
 #
+id      = tiny
+name    = tiny
+grdfile = /source/onroms/tests/tiny_grd.nc
+N       = 6
+grdtype = roms
+Vtrans  = 2
+theta_s = 3
+theta_b = 0
+Tcline  = 25
+#
+#
 id      = CORAL2
 name    = CORAL
 grdfile = /Volumes/R1/ROMS/CORAL/Grid/coral_grd_SRTM_v2.nc

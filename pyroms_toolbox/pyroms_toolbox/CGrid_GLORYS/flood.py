@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import numpy as np
-from pyroms import _remapping
+import pyroms._remapping
 
 import pyroms
 
@@ -37,11 +37,11 @@ def flood(varz, Cgrd, Cpos='t', irange=None, jrange=None, \
     x = Cgrd.lon_t
     y = Cgrd.lat_t
     h = Cgrd.h
-    if Cpos == 't':
+    if Cpos is 't':
         mask = Cgrd.mask_t[0,:,:]
-    elif Cpos == 'u':
+    elif Cpos is 'u':
         mask = Cgrd.mask_u[0,:,:]
-    elif Cpos == 'v':
+    elif Cpos is 'v':
         mask = Cgrd.mask_v[0,:,:]
 
     nlev, Mm, Lm = varz.shape

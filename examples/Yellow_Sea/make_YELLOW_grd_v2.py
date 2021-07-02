@@ -34,7 +34,7 @@ mask = np.ones(lon.shape)
 
 # create SRTM remap file for scrip
 remap_filename = 'remap_grid_SRTM.nc'
-nc = netCDF.Dataset(remap_filename, 'w', format='NETCDF3_64BIT')
+nc = netCDF.Dataset(remap_filename, 'w', format='NETCDF3_CLASSIC')
 nc.Description = 'remap grid file for SRTM 30s bathymetry'
 nc.Author = 'make_YELLOW_grd_v2.py'
 nc.Created = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -122,7 +122,7 @@ h = pyroms.remapping.remap(z, 'remap_weights_SRTM_to_YELLOW_bilinear.nc', \
                            spval=1e37)
 h = -h
 hmin = 5
-h = np.where(h < hmin, hmin, h)
+h = pyroms_toolbox.change(h, '<', hmin, hmin)
 
 # save raw bathymetry
 hraw = h.copy()
@@ -135,7 +135,7 @@ RoughMat = bathy_tools.RoughnessMatrix(hsmooth, hgrd.mask_rho)
 print('Max Roughness value is: ', RoughMat.max())
 
 # insure that depth is always deeper than hmin
-h = np.where(h < hmin, hmin, h)
+h = pyroms_toolbox.change(h, '<', hmin, hmin)
 
 # set depth to hmin where masked
 idx = np.where(hgrd.mask_rho == 0)

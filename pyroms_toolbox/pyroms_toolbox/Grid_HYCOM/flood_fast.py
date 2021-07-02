@@ -1,11 +1,12 @@
 # encoding: utf-8
 
 import numpy as np
-from pyroms import _remapping_fast
+import pyroms._remapping_fast
 
 import pyroms
 
-import creep
+#RD:
+# import creep
 
 def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
           spval=1.2676506e+30, dxy=5, cdepth=0, kk=0):
@@ -39,7 +40,7 @@ def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
     x = grd.lon_t
     y = grd.lat_t
     h = grd.h
-    if pos == 't':
+    if pos is 't':
         mask = grd.mask_t[0,:,:]
 
     nlev, Mm, Lm = varz.shape
@@ -89,9 +90,11 @@ def flood_fast(varz, grd, pos='t', irange=None, jrange=None, \
 
             idx = np.where(np.isnan(varz[k]) == 1)
             varz[k][idx] = spval
+            # RD:
             #varz[k,:] = _remapping_fast.flood(varz[k,:], dry, wet_mask, dxy)
+            print('RD new flooding')
             varz[k,:] = creep.cslf(varz[k,:],spval,-200.,200.)
-            print(k, varz[k,:].min() , varz[k,:].max())
+            print(varz[k,:].min() , varz[k,:].max())
 
     # drop the deepest values down
     idx = np.where(np.isnan(varz) == 1)

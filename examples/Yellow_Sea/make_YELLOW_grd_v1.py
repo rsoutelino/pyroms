@@ -1,13 +1,14 @@
 import os
-from pyroms import _iso
+import _iso
 import numpy as np
 from mpl_toolkits.basemap import Basemap, shiftgrid
-from scipy.interpolate import griddata
+from matplotlib.mlab import griddata
 import matplotlib.colors as colors
 from scipy.signal import medfilt2d
 import netCDF4
 
 import pyroms
+import pyroms_toolbox
 from bathy_smoother import *
 
 # Grid dimension
@@ -62,7 +63,7 @@ pyroms.grid.edit_mask_mesh_ij(hgrd, coast=coast)
 # read in topo data (on a regular lat/lon grid)
 # this topo come with basemap so you should have it on your laptop.
 # just update datadir with the appropriate path
-# you can get this data from matplolib svn with
+# you can get this data from matplolib svn with 
 # svn co https://matplotlib.svn.sourceforge.net/svnroot/matplotlib/trunk/htdocs/screenshots/data/"
 
 datadir = 'data/'
@@ -75,14 +76,14 @@ topo = -topo
 
 # fix minimum depth
 hmin = 5
-topo = np.where(topo < hmin, hmin, topo)
+topo = pyroms_toolbox.change(topo, '<', hmin, hmin)
 
 # interpolate new bathymetry
 lon, lat = np.meshgrid(lons, lats)
-h = griddata((lon.flat,lat.flat),topo.flat,(hgrd.lon_rho,hgrd.lat_rho), method='linear')
+h = griddata(lon.flat,lat.flat,topo.flat,hgrd.lon_rho,hgrd.lat_rho)
 
 # insure that depth is always deeper than hmin
-h = np.where(h < hmin, hmin, h)
+h = pyroms_toolbox.change(h, '<', hmin, hmin)
 
 # set depth to hmin where masked
 idx = np.where(hgrd.mask_rho == 0)

@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import numpy as np
-from pyroms import _remapping
+import pyroms._remapping
 
 import pyroms
 
@@ -34,12 +34,12 @@ def flood(varz, Bgrdz, Bpos='t', irange=None, jrange=None, \
     idx = np.where(abs((varz-spval)/spval)<=1e-5)
     varz[idx] = np.nan
 
-    if Bpos == 't':
+    if Bpos is 't':
         x = Bgrdz.lon_t
         y = Bgrdz.lat_t
         h = Bgrdz.h
         mask = Bgrdz.mask_t[0,:,:]
-    elif Bpos == 'uv':
+    elif Bpos is 'uv':
         x = Bgrdz.lon_uv
         y = Bgrdz.lat_uv
         h = Bgrdz.h

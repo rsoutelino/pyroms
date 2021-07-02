@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import numpy as np
-from pyroms import _remapping_fast_weighted
+import pyroms._remapping_fast_weighted
 
 import pyroms
 
@@ -37,7 +37,7 @@ def flood_fast_weighted(varz, grd, pos='t', irange=None, jrange=None, \
     x = grd.lon_t
     y = grd.lat_t
     h = grd.h
-    if pos == 't':
+    if pos is 't':
         mask = grd.mask_t[0,:,:]
 
     nlev, Mm, Lm = varz.shape

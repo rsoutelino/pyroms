@@ -94,7 +94,7 @@ topo = -topo
 
 # fix minimum depth
 hmin = 5
-topo = np.where(topo < hmin, hmin, topo)
+topo = pyroms_toolbox.change(topo, '<', hmin, hmin)
 
 # interpolate new bathymetry
 lon, lat = meshgrid(lons, lats)
@@ -106,7 +106,7 @@ h = griddata(lon.flat,lat.flat,topo.flat,hgrd.lon_rho,hgrd.lat_rho)
 #h = interpf(lon_rho,lat_rho)
 
 # insure that depth is always deeper than hmin
-h = np.where(h < hmin, hmin, h)
+h = pyroms_toolbox.change(h, '<', hmin, hmin)
 
 # check bathymetry roughness
 hgrd.mask_rho = reshape(hgrd.mask_rho, (Mp,Lp))

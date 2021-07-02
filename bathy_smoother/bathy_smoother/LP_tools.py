@@ -2,12 +2,11 @@ import numpy as np
 from numpy.random import random
 from time import localtime
 import os
-import logging
-
 try:
     from lpsolve55 import *
 except:
-    logging.warning('lpsolve55.so not found. Linear programming method will not be available.')
+    print('lpsolve55.so not found.')
+    print('Linear programming method will not be available.')
 
 
 # This code is adapted from the matlab code
