@@ -64,13 +64,17 @@ make f2py
 sudo make install
 cp -r scrip*.so* $PYROMS_PATH
 
-cd $CURDIR/../pyroms_toolbox
+cd $CURDIR/
+cd ../pyroms_toolbox
 sudo python setup.py install
-python setup.py install
+cd $PYROMS_PATH
+cp -r $CURDIR/../pyroms_toolbox/pyroms_toolbox ..
 
-cd $CURDIR/../bathy_smoother
+cd $CURDIR
+cd ../bathy_smoother
 sudo python setup.py install
-python setup.py install
+cd $PYROMS_PATH
+cp -r $CURDIR/../bathy_smoother/bathy_smoother ..
 
 echo
 echo "Done installing pyroms..."

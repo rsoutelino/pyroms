@@ -20,7 +20,8 @@ FLAGS = -g -fdefault-real-8 -ffixed-form -O2 -fPIC
 LIB  =  $(shell $(NC_CONFIG) --flibs)
 INCLUDE = -I$(INCDIR)
 F2PY = f2py
-F2PY_LIB = -L${LIBDIR} -lnetcdf -lnetcdff -lhdf5 -lhdf5_hl
+# F2PY_LIB = -L${LIBDIR} -lnetcdf -lnetcdff -lhdf5 -lhdf5_hl
+F2PY_LIB = -L${LIBDIR} -lnetcdf -lnetcdff
 F2PY_INCLUDE = -I${INCDIR}
 F2PY_F90_FLAG= '-g -fdefault-real-8 -ffixed-form -O2 -fPIC'
 
